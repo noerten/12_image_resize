@@ -35,7 +35,7 @@ def set_path_to_result(path_to_original, resulting_size):
         original_name)
     resulting_name = ''.join([original_name_without_extension, '__',
                               str(resulting_size[0]), 'x',
-                              str(resulting_size[1])]) + extension
+                              str(resulting_size[1]), extension]) 
     return os.path.join(path_without_name, resulting_name)
 
 
