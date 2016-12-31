@@ -12,26 +12,13 @@ def image_argparser():
     parser.add_argument("--scale", type=float,
                         help="How much to scale resulting image")
     parser.add_argument("--output", help="Path to resulting image")
-    arguments = parser.parse_args()
-    print(arguments.image_path)
-    if (arguments.width or arguments.height) and not arguments.scale:
-        if arguments.width:
-            print(arguments.width)
-        if arguments.height:
-            print(arguments.height)
-    elif arguments.scale and not (arguments.width or arguments.height):
-        print(arguments.scale)
-    elif arguments.scale and (arguments.width or arguments.height):
-        message = 'You cannot use size arguments and scale argument together'
-        parser.error(message)
-    if arguments.output:
-        print(arguments.output)
+    return parser.parse_args()
 
 
 def get_image(filepath):
     if not os.path.exists(filepath):
         return None
-    return Image.open(filepath)
+    return Image.open(filepath)        
 
 
 def save_image(image, filepath):
@@ -99,27 +86,21 @@ def resize_image(path_to_original, resulting_size, scale, path_to_result):
                                                                 resulting_size)
     elif scale is not None:
         resulting_image = resize_image_scale(original_image, scale)
-        print(resulting_image)
     else:
         resulting_image = original_image
     if path_to_result is None:
         path_to_result = set_path_to_result(path_to_original,
                                             resulting_image.size)
     save_image(resulting_image, path_to_result)
-    print('image resized!')
-
-
-def temp_argparse(image_path='1.png', width=None, height=None, scale=None,
-                  output=None):
-    if not (scale and (width or height)):
-        resulting_size = (width, height)
-        resize_image(image_path, resulting_size, scale, output)
-    else:
-        message = 'You cannot use size arguments and scale argument together'
-        print(message)
 
 
 if __name__ == '__main__':
-    # image_argparser()
-    temp_argparse(image_path='1\\1.png', width=None, height=None, scale=2.5,
-                  output='1\\3.png')
+    console_arguments = image_argparser()
+    if not (console_arguments.scale and (console_arguments.width or
+                                         console_arguments.height)):
+        resulting_size = (console_arguments.width, console_arguments.height)
+        resize_image(console_arguments.image_path, resulting_size,
+                     console_arguments.scale, console_arguments.output)
+        print('Image resized!')
+    else:
+        print('You cannot use size arguments and scale argument together')
