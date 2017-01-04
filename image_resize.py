@@ -48,12 +48,11 @@ def print_ratio_if_incorrect(original_size, resulting_size):
         print(message)
 
 
-def resize_image_with_new_width_and_height(original_image, resulting_size):
-    print_ratio_if_incorrect(original_image.size, resulting_size)
+def resize_image_with_both_sizes(original_image, resulting_size):
     return original_image.resize(resulting_size)
 
 
-def resize_image_with_new_width_or_height(original_image, resulting_size):
+def resize_image_with_one_size(original_image, resulting_size):
     if resulting_size[0] is not None:
         resulting_height = (resulting_size[0]*original_image.size[1] /
                             original_image.size[0])
@@ -79,11 +78,12 @@ def resize_image_scale(original_image, scale):
 def resize_image(path_to_original, resulting_size, scale, path_to_result):
     original_image = get_image(path_to_original)
     if (resulting_size[0] and resulting_size[1]) is not None:
-        resulting_image = resize_image_with_new_width_and_height(
+        print_ratio_if_incorrect(original_image.size, resulting_size)
+        resulting_image = resize_image_with_both_sizes(
             original_image, resulting_size)
     elif (resulting_size[0] or resulting_size[1]) is not None:
-        resulting_image = resize_image_with_new_width_or_height(original_image,
-                                                                resulting_size)
+        resulting_image = resize_image_with_one_size(original_image,
+                                                     resulting_size)
     elif scale is not None:
         resulting_image = resize_image_scale(original_image, scale)
     else:
